@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageDraw
 
 import argparse
 import os
@@ -60,11 +60,19 @@ def generate_images(cards, pack):
     template_path = full_in_path + "/" + TEMPLATE_IMAGE
     setup(full_out_dir)
 
-    im = Image.open(template_path)
+    # font = ImageFont.truetype("sans-serif.ttf", 16)
     for card in cards:
+        # Open the image and draw some text.
+        img = Image.open(template_path)
+        draw = ImageDraw.Draw(img)
+
+        # TODO(harrison): Probably need to configure this based on location.
+        draw.text((30, 30), card.title, (0, 0, 0))
+        draw.text((30, 260), card.flavor, (0, 0, 0))
+
         card_filename = full_out_dir + "/" + card.short + ".jpg"
         print("Printing: {}".format(card_filename))
-        im.save(card_filename, "JPEG")
+        img.save(card_filename, "JPEG")
 
 if __name__ == '__main__':
 
